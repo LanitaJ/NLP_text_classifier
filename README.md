@@ -1,6 +1,6 @@
 # Task
 
-You need to predict whether there is contact information in the ad.
+You need to predict contact information in the ad.
 
 For training, you have the following fields:
 * `title`,
