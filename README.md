@@ -1,30 +1,29 @@
-# Задача
+# Task
 
-Вам необходимо предсказать, есть ли в объявлении контактная информация.
+You need to predict whether there is contact information in the ad.
 
-Для обучения у вас есть следующие поля:
-* `title` - заголовок,
-* `description` - описание,
-* `subcategory` - подкатегория,
-* `category` - категория,
-* `price` - цена,
-* `region` - регион,
-* `city` - город,
-* `datetime_submitted` - дата размещения.
+For training, you have the following fields:
+* `title`,
+* `description`,
+* `subcategory`,
+* `category`,
+* `price`,
+* `region`,
+* `city`,
+* `datetime_submitted`.
 
-Таргет: `is_bad`
+Target: `is_bad`
 
-Есть два датасета `train.csv` и `val.csv`: `train.csv` содержит больше данных, однако разметка в нём менее точная; в `val.csv` существенно меньше данных, но более точная разметка.
-Тестовый датасет, на котором мы оценим решнение, будет больше похож на `val.csv`.
-При этом в датасетах могут встречаться (как и, к сожалению, в любых размечаемых данных) некорректные метки.
+You have 2 datasets `train.csv` and `val.csv`: `train.csv` contains more data, but data markup is worse; in `val.csv` there is much less data, but data markup is better.
+Test dataset for checking your solution will look like `val.csv`.
+Pay attention that dataset can contain incorrect marks.
 
-Данные находятся по ссылке https://drive.google.com/drive/folders/1anZ1bxi5WhPmBlCBnYBYzo4foSgGSee5?usp=sharing. 
+All data here: https://drive.google.com/drive/folders/1anZ1bxi5WhPmBlCBnYBYzo4foSgGSee5?usp=sharing. 
+Your solution file with test data will be placed at `/task-for-hiring-data/test_data.csv` during launching
 
-Во время запуска вашего решения файл с тестовыми данными будет располагаться по пути `/task-for-hiring-data/test_data.csv`
-
-Файл с результатом работы модели должен представлять из себя `csv` с колонками:
-* `index`: `int`, положение записи в файле;
-* `prediction`: `float` от 0 до 1, вероятность того, что в объявлении есть контактная информация.
+The file with the result of the model should be csv-file with columns:
+* `index`: `int`, the number of the entry in file;
+* `prediction`: `float` from 0 to 1, probability that ad contains contact information.
 
 |index  |prediction|
 |-------|----------|
@@ -33,22 +32,22 @@
 |...|...|
 |N|0.68|
 
-После отрабатывания скрипта `run.py` должен записаться csv-файл `/task-for-hiring-data/target_prediction.csv`.
+After working out the script `run.py` a csv file should be written `/task-for-hearing-data/target_prediction.csv`.
 
-В качестве метрики качества работы вашей модели мы будем использовать усредненный `ROC-AUC` по каждой категории объявлений.
+As a metric of the quality of your model's performance, we will use the average 'ROC-AUC' for each ad category.
 
-Также есть задача "со звездочкой": предсказать начало и конец контактной информации в описании объявления. Например:
-* для строки `Звоните на +7-888-888-88-88, в объявлении некорректный номер`: (11, 26),
-* для строки `Звоните на +7-888aaaaa888aaaa88a88, в объявлении некорректный номер`: (11, 33),
-* для строки `мой tg: @ivanicki_i на звонки не отвечаю`: (8, 18),
-* для строки `мой tg: ivanicki_i на звонки не отвечаю`: (8, 17),
-* если в описании объявления (поле `description`) контактов нет, то (None, None)
-* если в описании объявления (поле `description`) более одного контакта (`Звоните не 89990000000 или на 89991111111`), то (None, None).
+There is also a bonus task: to predict the beginning and end of contact information in the ad description. For example:
+* for string `Call +7-888-888-88-88, incorrect number in ad `: (5, 21),
+* for string `Call +7-888aaaaa888aaaa88a88, incorrect number in ad`: (5, 28),
+* for string `my telegram: @ivanicki_i I don't answer calls`: (13, 24),
+* for string `my telegram: ivanicki_i I don't answer calls`: (13, 24),
+* if there is no contact in description: (None, None)
+* if there is more then one contact in description(`Call 89990000000 or 89991111111`): (None, None).
 
-Файл с результатом работы модели должен представлять из себя `csv` с колонками:
-* `index`: `int`, положение записи в файле;
-* `start`: `int` or `None`, начало маски контакта;
-* `end`: `int` or `None`, конец маски контакта.\
+The file with the result of the model should be a ' csv` with columns:
+* `index`: `int`, position of the record in file;
+* `start`: `int` or `None`, start contact mask;
+* `end`: `int` or `None`, end contact mask.\
 (`start` < `end`)
 
 |index  |start|end|
@@ -59,39 +58,39 @@
 |...|...|
 |N|None|None
 
-После отрабатывания скрипта `run.py` должен записаться csv-файл `/task-for-hiring-data/mask_prediction.csv`.
+After working out the script `run.py` a csv file should be written `/task-for-hearing-date/mask_prediction.csv`.
 
-Для задачи со звездочкой метрикой будет усредненный IoU (`Intersection over Union`) по текстам объявлений.
+For a bonus task, the metric will be the average IoU (`Intersection over Union') for the ad texts.
 
-У контейнера не будет доступа в интернет.
-Вы можете добавить нужные библиотеки в файл `requirements.txt` или напрямую в `Dockerfile`.
+A container have no access to the internet
+You can add necessary modules in `requirements.txt` or directly in `Dockerfile`.
 
-Сделайте форк этого репозитория, а в качестве решения пришлите ссылку на вашу ветку
+Make a fork of this repository, and as a solution, send a link to your branch
 
-Удачи :)
+Good luck :)
 
-# Запуск решения
-1. Docker-образ будет собираться командой:\
+# Launching the solution
+1. The docker image will be builded by the command:\
 ```docker build -t task_for_hiring -f Dockerfile .```
-2. Далее контейнер будет запускаться:\
+2. Next, the container will be launched:\
 ```docker run -it -v ~/main/task-for-hiring-data:/task-for-hiring-data task_for_hiring python lib/run.py```
-3. Файлы с полученным предсказанием должны находиться по тому же пути, что и в тестовом варианте скрипта `lib/run.py`
+3. The files with the received prediction should be located in the same path as in the test version of the script `lib/run.py`
 
-Обратите внимание, что в контейнере по умолчанию используется python3:
+Pay attention container uses python3:
 
 ```docker run -it task_for_hiring python -c "import sys; print(sys.version)"```
 > 3.7.3 (default, Mar 27 2019, 22:11:17)
 
-Ресурсы контейнера:
-* 4 Гб оперативной памяти
-* 2 ядра CPU
-* нет GPU
+Container resources:
+* 4 GB RAM
+* 2 core CPU
+* no GPU
 
-Ограничение на время работы:
-* 100 000 объектов должны обрабатываться не более 90 минут для предсохраненной модели, 270 минут для обучения и инференса.
+Limitation of work duration:
+* 100 000 objects should be processed no more than 90 minutes for the previously saved model, 270 minutes for training and inference.
 
-**Важно, чтобы всё, что нужно для запуска run.py, было в репозитории. Часто решающие предлагают перед запуском вручную скачать архив с весами модели, в таком случае нужно чтобы веса скачивались и распаковывались при сборке контейнера либо обучение происходило в пайплайне.**
+**It is important that everything you need to run run.py, was in the repository. Often, the decision makers offer to manually download the archive with the weights of the model before launching, in this case, it is necessary that the weights are downloaded and unpacked during the assembly of the container or the training takes place in the pipeline.**
 
 # Baseline
 
-Текущий бэйзлайн, который надо побить для первой части - 0.9.
+Current baseline, you should break - 0.9.
