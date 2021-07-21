@@ -69,7 +69,7 @@ Make a fork of this repository, and as a solution, send a link to your branch
 
 Good luck :)
 
-# Launching the solution
+# Launching solution
 1. The docker image will be builded by the command:\
 ```docker build -t task_for_hiring -f Dockerfile .```
 2. Next, the container will be launched:\
